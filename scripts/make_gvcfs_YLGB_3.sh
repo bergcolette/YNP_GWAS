@@ -5,7 +5,7 @@ for i in ${mainDir}/YLGB_3*.rmdup.bam;
 do java -jar ~/resources/packages/gatk-4.2.6.1/gatk-package-4.2.6.1-local.jar HaplotypeCaller \
 -R ${genome} \
 -I $i \
--O ${i:0:-32}_WGS_AHQTv1.g.vcf.gz \
+-O ${i:0:-15}_WGS_AHQTv1.g.vcf.gz \
 --heterozygosity 0.05 \
 --ERC GVCF;
 done
