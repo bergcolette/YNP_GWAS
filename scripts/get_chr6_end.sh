@@ -1,4 +1,4 @@
-mainDir="/scratch/colette/demux_novogene_lane_2023/bams/2022_lane"
+mainDir="/scratch/colette/demux_novogene_lane_2023/bams/preInbredLines"
 
 for i in ${mainDir}/*.bam; 
 
