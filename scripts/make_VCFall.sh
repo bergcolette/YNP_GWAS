@@ -1,4 +1,4 @@
-mainDir="/scratch/colette/demux_novogene_lane_2023"
+mainDir="/scratch/colette/demux_novogene_lane_2023/bams/gvcfs"
 genome="/home/colette_berg/resources/reference_genomes/AHQT/Mimulus_guttatus_var_AHQT1.mainGenome.fa"
 
 java -jar ~/resources/packages/gatk-4.2.6.1/gatk-package-4.2.6.1-local.jar  CombineGVCFs \
@@ -9,7 +9,6 @@ java -jar ~/resources/packages/gatk-4.2.6.1/gatk-package-4.2.6.1-local.jar  Comb
 --variant ${mainDir}/YGBR_4.3_WGS_AHQTv1.g.vcf.gz \
 --variant ${mainDir}/YGBR_7.1_WGS_AHQTv1.g.vcf.gz \
 --variant ${mainDir}/YGBR_8.3_WGS_AHQTv1.g.vcf.gz \
---variant ${mainDir}/YGBR_9.1_WGS_AHQTv1.g.vcf.gz \
 --variant ${mainDir}/YHLB_10.2_WGS_AHQTv1.g.vcf.gz \
 --variant ${mainDir}/YHLB_11.1_WGS_AHQTv1.g.vcf.gz \
 --variant ${mainDir}/YHLB_12.3_WGS_AHQTv1.g.vcf.gz \
@@ -79,7 +78,6 @@ java -jar ~/resources/packages/gatk-4.2.6.1/gatk-package-4.2.6.1-local.jar  Comb
 --variant ${mainDir}/YVTC_7.2_WGS_AHQTv1.g.vcf.gz \
 --variant ${mainDir}/YVTC_8.2_WGS_AHQTv1.g.vcf.gz \
 --variant ${mainDir}/YVTC_9.3_WGS_AHQTv1.g.vcf.gz \
---variant ${mainDir}/YWTB_1.2_WGS_AHQTv1.g.vcf.gz \
 --variant ${mainDir}/YWTB_2.2_WGS_AHQTv1.g.vcf.gz \
 --variant ${mainDir}/YWTB_6.2_WGS_AHQTv1.g.vcf.gz \
 --variant ${mainDir}/YWTB_7.2_WGS_AHQTv1.g.vcf.gz \
@@ -101,8 +99,8 @@ java -jar ~/resources/packages/gatk-4.2.6.1/gatk-package-4.2.6.1-local.jar  Comb
     -O YNP_WGS_allCombined.g.vcf.gz
  
 
-java -jar ~/resources/packages/gatk-4.2.6.1/gatk-package-4.2.6.1-local.jar  GenotypeGVCFs \
-   -R ${genome} \
-   -V ${mainDir}/YNP_WGS_combined.g.vcf.gz \
-   --heterozygosity 0.05 \
-   -O YNP_WGS_allCombined.vcf.gz
+#java -jar ~/resources/packages/gatk-4.2.6.1/gatk-package-4.2.6.1-local.jar  GenotypeGVCFs \
+ #  -R ${genome} \
+  # -V YNP_WGS_combined.g.vcf.gz \
+  # --heterozygosity 0.05 \
+  # -O YNP_WGS_allCombined.vcf.gz
