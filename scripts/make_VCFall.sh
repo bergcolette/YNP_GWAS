@@ -4,6 +4,7 @@ genome="/home/colette_berg/resources/reference_genomes/AHQT/Mimulus_guttatus_var
 java -jar ~/resources/packages/gatk-4.2.6.1/gatk-package-4.2.6.1-local.jar  CombineGVCFs \
    -R ${genome} \
 	--variant ${mainDir}/YGBR_10.1_WGS_AHQTv1.g.vcf.gz \
+--variant ${mainDir}/YGBR_9.1_WGS_AHQTv1.g.vcf.gz \
 --variant ${mainDir}/YGBR_2.1_WGS_AHQTv1.g.vcf.gz \
 --variant ${mainDir}/YGBR_3.1_WGS_AHQTv1.g.vcf.gz \
 --variant ${mainDir}/YGBR_4.3_WGS_AHQTv1.g.vcf.gz \
