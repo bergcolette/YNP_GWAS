@@ -81,7 +81,6 @@ java -jar ~/resources/packages/gatk-4.2.6.1/gatk-package-4.2.6.1-local.jar  Comb
 --variant ${mainDir}/YVTC_9.3_WGS_AHQTv1.g.vcf.gz \
 --variant ${mainDir}/YWTB_2.2_WGS_AHQTv1.g.vcf.gz \
 --variant ${mainDir}/YWTB_6.2_WGS_AHQTv1.g.vcf.gz \
---variant ${mainDir}/YWTB_7.2_WGS_AHQTv1.g.vcf.gz \
 --variant ${mainDir}/AHQNT_WGS_AHQTv1.g.vcf.gz \
 --variant ${mainDir}/AHQT1.2_WGS_AHQTv1.g.vcf.gz \
 --variant ${mainDir}/HLB4-2_WGS_AHQTv1.g.vcf.gz \
