@@ -51,4 +51,15 @@ s.class(pca.YNP$li, fac=pop(data),
         axesel=FALSE, cstar=0, cpoint=3)
 
 
+# making a relatedness heat map 
 
+rel <- read.csv("YNP_stringent_chr01_filtIndv.relatedness", sep="\t")
+
+ggplot(rel, aes(x=INDV2, y=INDV1,
+                fill=RELATEDNESS_AJK)) + geom_tile() +
+  scale_fill_gradient2(low="blue", high="red")
+
+
+heatmap(rel)
+
+rel$INDV1
