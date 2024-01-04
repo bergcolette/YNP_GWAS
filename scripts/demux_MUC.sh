@@ -1,1 +1,0 @@
-~/resources/packages/bbmap/demuxbyname.sh in=~/novogene_2023_lane/01.RawData/MUC/MUC_CKDL230037751-1A_22FF27LT3_L7_1.fq.gz in2=~/novogene_2023_lane/01.RawData/MUC/MUC_CKDL230037751-1A_22FF27LT3_L7_2.fq.gz out=%_MUC_R1.fastq.gz out2=%_MUC_R2.fastq.gz outu=Undetermined_R1_001_MUC.fastq.gz  outu2=Undetermined_R2_001_MUC.fastq.gz length=8 prefixmode=t
