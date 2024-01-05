@@ -1,5 +1,6 @@
-vcftools --gzvcf YNP_WGS_allCombined_withYGBR_9.1.vcf.gz \
+vcftools --gzvcf YNP_WGS_allCombined_1.04.vcf.gz \
 --minDP 3 \
+--chr Chr_01 \
 --thin 150 \
 --max-missing .8 \
 --minQ 29 \
