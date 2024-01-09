@@ -1,0 +1,1 @@
+vcftools --vcf YNP_WholeGenome_stringent.recode.vcf --thin 10000 --keep retain_indvs_rel.txt --out YNP_WholeGenome_thinned --recode 
