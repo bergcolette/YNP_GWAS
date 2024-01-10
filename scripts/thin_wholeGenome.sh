@@ -1,1 +1,3 @@
-vcftools --vcf YNP_WholeGenome_stringent.recode.vcf --thin 10000 --keep retain_indvs_rel.txt --out YNP_WholeGenome_thinned --recode 
+dataDir="/scratch/colette/demux_novogene_lane_2023/YNP_GWAS/"
+
+vcftools --vcf YNP_filt_renamed.vcf --thin 10000 --out ${dataDir}/YNP_WholeGenome_thinned --recode 

@@ -7,10 +7,9 @@ for i in $list;
 
 do 
 
-vcftools --gzvcf ${dataDir}/YNP_WholeGenome_stringent.recode.vcf \
+vcftools --gzvcf ${dataDir}/YNP_genic_77.recode.vcf \
 --chr Chr_${i} \
---keep retain_indvs_rel.txt \
---out ${dataDir}/YNP_chr${i} \
+--out ${dataDir}/YNP_chr${i}_genic \
 --recode;
 
 done
