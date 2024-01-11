@@ -11,21 +11,21 @@ library(ggplot2)
 setwd("~/Documents/UMontana/Research/YNP/YNP_GWAS/")
 
 # read in vcf / convert to genind format 
-YNP_inbredLines <- read.vcfR("YNP_thinned_biallelic.recode.vcf")
+YNP_inbredLines <- read.vcfR("YNP_genic_out6.recode.vcf")
 
 # convert to genind 
 YNP_inbredLines_genind <- vcfR2genind(YNP_inbredLines)
-
+YNP_inbredLines_genind
 
 # first changing the names because the vcf names are way too long 
-#indv_info <- read.csv("YNP_names.csv")
+indv_info <- read.csv("YNP_names.csv")
 
 #rem <- filter(indv_info, keep == 0)
-#indNames(YNP_inbredLines_genind) <- indv_info$names
+indNames(YNP_inbredLines_genind) <- indv_info$names
 
 # adding in population 
-#pop(YNP_inbredLines_genind) <- indv_info$clust
-
+pop(YNP_inbredLines_genind) <- indv_info$habitat
+pop(YNP_inbredLines_genind)
 # remove some of the individuals 
 #removeInd <- rem$names
 
@@ -48,17 +48,15 @@ s.label(pca.YNP$li)
 dat <- pca.YNP$li
 write.csv(dat, "PC_axes.csv")
 
-ggplot(dat, aes(x=Axis1, y=Axis2)) + geom_point() 
-
-+ 
+ggplot(dat, aes(x=Axis1, y=Axis2, col=pop(data))) + geom_point() + 
   geom_label(label=rownames(dat), 
 nudge_x = 0.25, nudge_y = 0.25)
 
 #rownames(dat)
 
 # add a plot with the populations 
-s.class(pca.YNP$li, fac=pop(data),
-        col=transp(funky(15),.6),
+s.class(pca.YNP$li, fac=as.factor(pop(data)),
+        col=,
         axesel=FALSE, cstar=0, cpoint=3)
 
 
@@ -112,7 +110,53 @@ ggplot(filter(dat, Group.1 > .1), aes(x=x,
 #        axis.text = element_text(size=8))
 
 
+# FstScanning 
+chr1_fstScan <- read.csv("YNP_chr01_genic.windowed.weir.fst", sep="\t")
+chr2_fstScan <- read.csv("YNP_chr02_genic.windowed.weir.fst", sep="\t")
 
+chr3_fstScan <- read.csv("YNP_chr03_genic.windowed.weir.fst", sep="\t")
+chr4_fstScan <- read.csv("YNP_chr04_genic.windowed.weir.fst", sep="\t")
+
+chr5_fstScan <- read.csv("YNP_chr05_genic.windowed.weir.fst", sep="\t")
+chr6_fstScan <- read.csv("YNP_chr06_genic.windowed.weir.fst", sep="\t")
+
+chr7_fstScan <- read.csv("YNP_chr07_genic.windowed.weir.fst", sep="\t")
+chr8_fstScan <- read.csv("YNP_chr08_genic.windowed.weir.fst", sep="\t")
+
+chr9_fstScan <- read.csv("YNP_chr09_genic.windowed.weir.fst", sep="\t")
+chr10_fstScan <- read.csv("YNP_chr10_genic.windowed.weir.fst", sep="\t")
+
+chr11_fstScan <- read.csv("YNP_chr11_genic.windowed.weir.fst", sep="\t")
+chr12_fstScan <- read.csv("YNP_chr12_genic.windowed.weir.fst", sep="\t")
+
+
+chr13_fstScan <- read.csv("YNP_chr13_genic.windowed.weir.fst", sep="\t")
+chr14_fstScan <- read.csv("YNP_chr14_genic.windowed.weir.fst", sep="\t")
+
+a <- rbind(chr1_fstScan,
+        chr2_fstScan,
+        chr3_fstScan,
+        chr4_fstScan,
+        chr5_fstScan,
+        chr6_fstScan,
+        chr7_fstScan,
+        chr8_fstScan,
+        chr9_fstScan,
+        chr10_fstScan,
+        chr11_fstScan,
+        chr12_fstScan,
+        chr13_fstScan,
+        chr14_fstScan)
+
+a
+
+ggplot(filter(a, MEAN_FST > 0),
+              aes(x=BIN_START, y=MEAN_FST)) + 
+  geom_point() + facet_wrap(~CHROM, nrow=1) + 
+  geom_smooth()
+
+ggplot(filter(chr6_fstScan, MEAN_FST >0), aes(x=BIN_START, y=MEAN_FST)) + geom_point() +
+  geom_smooth()
 
 
 
