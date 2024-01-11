@@ -7,8 +7,8 @@ for i in $list;
 
 do 
 
-vcftools --vcf ${dataDir}/YNP_chr${i}_genic.recode.vcf \ 
---thin 5000 \
+vcftools --vcf ${dataDir}/YNP_chr${i}_genic.recode.vcf \
+--thin 10000 \
 --out ${dataDir}/YNP_chr${i}_genic_thin \
 --recode;
 
