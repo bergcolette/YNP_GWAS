@@ -7,7 +7,7 @@ for i in $list;
 
 do 
 
-vcftools --gzvcf ${dataDir}/YNP_genic_77.recode.vcf \
+vcftools --gzvcf ${dataDir}/YNP_genic_renamed.recode.vcf \
 --chr Chr_${i} \
 --out ${dataDir}/YNP_chr${i}_genic \
 --recode;
