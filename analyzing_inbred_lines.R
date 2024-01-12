@@ -11,7 +11,7 @@ library(ggplot2)
 setwd("~/Documents/UMontana/Research/YNP/YNP_GWAS/")
 
 # read in vcf / convert to genind format 
-YNP_inbredLines <- read.vcfR("YNP_genic_out6.recode.vcf")
+YNP_inbredLines <- read.vcfR("YNP_genic_inv5.recode.vcf")
 
 # convert to genind 
 YNP_inbredLines_genind <- vcfR2genind(YNP_inbredLines)
@@ -21,11 +21,11 @@ YNP_inbredLines_genind
 indv_info <- read.csv("YNP_names.csv")
 
 #rem <- filter(indv_info, keep == 0)
-indNames(YNP_inbredLines_genind) <- indv_info$names
+#indNames(YNP_inbredLines_genind) <- indv_info$names
 
 # adding in population 
-pop(YNP_inbredLines_genind) <- indv_info$habitat
-pop(YNP_inbredLines_genind)
+#pop(YNP_inbredLines_genind) <- indv_info$habitat
+#pop(YNP_inbredLines_genind)
 # remove some of the individuals 
 #removeInd <- rem$names
 
@@ -59,6 +59,12 @@ s.class(pca.YNP$li, fac=as.factor(pop(data)),
         col=,
         axesel=FALSE, cstar=0, cpoint=3)
 
+PC <- read.csv("PC_axes.csv")
+ggplot(PC, aes(x=as.numeric(Longitude), y=as.numeric(Latitude),
+               col=inv5_type)) +
+  geom_point()
+
+ggplot(PC, aes(x=inv5_type, y=elevation)) + geom_boxplot()
 
 # making a relatedness heat map 
 
@@ -73,15 +79,29 @@ ggplot(rel, aes(x=i.s, y=j.s,
 
 
 # calculating LD 
+LD_chr01 <- read.csv("YNP_chr01_genic_thin.geno.ld", sep="\t")
+LD_chr02 <- read.csv("YNP_chr02_genic_thin.geno.ld", sep="\t")
+
+LD_chr03 <- read.csv("YNP_chr03_genic_thin.geno.ld", sep="\t")
+LD_chr04 <- read.csv("YNP_chr04_genic_thin.geno.ld", sep="\t")
 
 LD_chr05 <- read.csv("YNP_chr05_genic_thin.geno.ld", sep="\t")
-LD_chr04 <- read.csv("YNP_chr04_genic_thin.geno.ld", sep="\t")
+LD_chr06 <- read.csv("YNP_chr06_genic_thin.geno.ld", sep="\t")
 
 LD_chr07 <- read.csv("YNP_chr07_genic_thin.geno.ld", sep="\t")
 LD_chr08 <- read.csv("YNP_chr08_genic_thin.geno.ld", sep="\t")
 
+LD_chr09 <- read.csv("YNP_chr09_genic_thin.geno.ld", sep="\t")
+LD_chr10 <- read.csv("YNP_chr10_genic_thin.geno.ld", sep="\t")
 
-LD_chr05 <- mutate(LD_chr05, dist = POS2 - POS1)
+LD_chr11 <- read.csv("YNP_chr11_genic_thin.geno.ld", sep="\t")
+LD_chr12 <- read.csv("YNP_chr12_genic_thin.geno.ld", sep="\t")
+
+LD_chr13 <- read.csv("YNP_chr13_genic_thin.geno.ld", sep="\t")
+LD_chr14 <- read.csv("YNP_chr14_genic_thin.geno.ld", sep="\t")
+
+
+#LD_chr05 <- mutate(LD_chr05, dist = POS2 - POS1)
 #lheatmap(rel)
 
 ggplot(filt_LD_chr05, aes(x=dist, y=R.2)) + geom_point() + geom_smooth()
@@ -92,12 +112,13 @@ ggplot(filt_LD_chr06, aes(x=R.2)) + geom_histogram()
 
 
 
-ggplot(filt_LD_chr05, aes(x=as.factor(POS1), y=as.factor(POS2),
+ggplot(filter(LD_chr10, R.2!="NaN"), aes(x=as.factor(POS1), 
+                                   y=as.factor(POS2),
                 fill=R.2, col=R.2)) + geom_tile()  +
   scale_fill_gradient2(low="blue", high="red") +
   scale_color_gradient2(low="blue", high="red") +
   theme(axis.text.x = element_text(angle=90),
-        axis.text = element_text(size=8))
+        axis.text = element_text(size=3))
 
 dat <- aggregate(filt_LD_chr05$POS1, list(filt_LD_chr05$R.2),
           mean)
@@ -148,14 +169,13 @@ a <- rbind(chr1_fstScan,
         chr13_fstScan,
         chr14_fstScan)
 
-a
 
-ggplot(filter(a, MEAN_FST > 0),
+ggplot(a,
               aes(x=BIN_START, y=MEAN_FST)) + 
   geom_point() + facet_wrap(~CHROM, nrow=1) + 
   geom_smooth()
 
-ggplot(filter(chr6_fstScan, MEAN_FST >0), aes(x=BIN_START, y=MEAN_FST)) + geom_point() +
+ggplot(chr5_fstScan, aes(x=BIN_START, y=MEAN_FST)) + geom_point() +
   geom_smooth()
 
 
