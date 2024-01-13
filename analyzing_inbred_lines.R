@@ -64,7 +64,10 @@ ggplot(PC, aes(x=as.numeric(Longitude), y=as.numeric(Latitude),
                col=inv5_type)) +
   geom_point()
 
-ggplot(PC, aes(x=inv5_type, y=elevation)) + geom_boxplot()
+ggplot(PC, aes(x=elevation, y=elevation, col=inv5_type)) + geom_point()
+
+ggplot(PC, aes(x=Latitude, y=Longitude, col=inv5_type)) + geom_point()
+
 
 # making a relatedness heat map 
 

@@ -1,0 +1,140 @@
+---
+title: "figures_jan31_talk"
+output: html_document
+date: "2024-01-12"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(hierfstat)
+library(adegenet)
+library(vcfR)
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+
+setwd("~/Documents/UMontana/Research/YNP/YNP_GWAS/")
+```
+
+## YNP analysis of inbred lines 
+
+```{r data setup}
+# read in vcf / convert to genind format 
+YNP_inbredLines <- read.vcfR("YNP_pruned.recode.vcf")
+
+# convert to genind 
+YNP_inbredLines_genind <- vcfR2genind(YNP_inbredLines)
+```
+
+## First, reading in the data. I have found an inversion on linkage group 5 and I'm making a PCA to categorize individuals based on inversion type. 
+
+
+```{r PCA, echo=FALSE}
+data <- YNP_inbredLines_genind
+# nas aren't allowed (annoying, so replacing)
+
+YNP_for_PCA <- tab(data,
+                              NA.method="mean")
+
+# run a PCA to see if it fits expectations / matches geography 
+pca.YNP <- dudi.pca(YNP_for_PCA,
+                    center=TRUE)
+
+dat <- pca.YNP$li
+#write.csv(dat, "PC_axes_inv5.csv")
+
+ggplot(dat, aes(x=Axis1, y=Axis2, col=pop(data))) + geom_point() + 
+  geom_label(label=rownames(dat), 
+nudge_x = 0.25, nudge_y = 0.25)
+
+```
+
+
+```{r}
+# calculating LD 
+LD_chr01 <- read.csv("YNP_chr01_genic_thin.geno.ld", sep="\t")
+LD_chr02 <- read.csv("YNP_chr02_genic_thin.geno.ld", sep="\t")
+
+LD_chr03 <- read.csv("YNP_chr03_genic_thin.geno.ld", sep="\t")
+LD_chr04 <- read.csv("YNP_chr04_genic_thin.geno.ld", sep="\t")
+
+LD_chr05 <- read.csv("YNP_chr05_genic_thin.geno.ld", sep="\t")
+LD_chr06 <- read.csv("YNP_chr06_genic_thin.geno.ld", sep="\t")
+
+LD_chr07 <- read.csv("YNP_chr07_genic_thin.geno.ld", sep="\t")
+LD_chr08 <- read.csv("YNP_chr08_genic_thin.geno.ld", sep="\t")
+
+LD_chr09 <- read.csv("YNP_chr09_genic_thin.geno.ld", sep="\t")
+LD_chr10 <- read.csv("YNP_chr10_genic_thin.geno.ld", sep="\t")
+
+LD_chr11 <- read.csv("YNP_chr11_genic_thin.geno.ld", sep="\t")
+LD_chr12 <- read.csv("YNP_chr12_genic_thin.geno.ld", sep="\t")
+
+LD_chr13 <- read.csv("YNP_chr13_genic_thin.geno.ld", sep="\t")
+LD_chr14 <- read.csv("YNP_chr14_genic_thin.geno.ld", sep="\t")
+
+
+#LD_chr05 <- mutate(LD_chr05, dist = POS2 - POS1)
+#lheatmap(rel)
+```
+
+
+```{r}
+filt_LD_chr05 <- filter(LD_chr05, R.2 != "NaN")
+
+lines <- read.csv("YNP_inbredLines.csv")
+
+ggplot(filter(lines, inv5_type != "#N/A"), aes(x=Latitude, y=Longitude, col=inv5_type)) + geom_point() + facet_wrap(~L1029_in_bams)
+```
+
+
+```{r}
+ggplot(filter(LD_chr05, R.2!="NaN"), aes(x=as.factor(POS1), 
+                                   y=as.factor(POS2),
+                fill=R.2, col=R.2)) + geom_tile()  +
+  scale_fill_gradient2(low="blue", high="red") +
+  scale_color_gradient2(low="blue", high="red") +
+  theme(axis.text.x = element_text(angle=90),
+        axis.text = element_text(size=3))
+```
+
+
+```{r}
+just_inversion5 <- filter(LD_chr05, POS1 > 19500000 & POS2 > 1950000 & R.2 != "NaN")
+
+ggplot(just_inversion5, aes(x=POS1, y=R.2)) + geom_point()
+```
+
+
+```{r}
+
+ggplot(filter(LD_chr05, R.2!="NaN" & POS1 > 18000000 & POS2 > 18000000), aes(x=as.factor(POS1), 
+                                   y=as.factor(POS2),
+                fill=R.2, col=R.2)) + geom_tile()  +
+  scale_fill_gradient2(low="blue", high="red") +
+  scale_color_gradient2(low="blue", high="red") + 
+  theme(legend.position = "none",
+        panel.grid.major = element_blank(),
+        panel.border = element_blank(),
+        axis.line.x = element_line(colour = "black"),
+        axis.line.y = element_line(colour = "black"),
+        axis.text.x = element_text(size=12),
+        axis.text.y = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.title.x = element_blank(),
+        strip.background = element_rect(color="white", fill="white", size=1.5)) + theme_bw()
+ # theme(axis.text.x = element_text(angle=90),
+ #       axis.text = element_text(size=3)) + 
+  theme_bw()
+
+```
+
+```{r}
+dens <- read.csv("snpDensity.csv")
+
+ggplot(dens, aes(x=BIN_START, y=SNP_COUNT,
+                 col=group)) + 
+  geom_smooth()
+```
+
