@@ -1,0 +1,17 @@
+num="SRR071996
+SRR1259270
+SRR9674909
+SRR072712
+SRR1190510
+SRR1259272
+SRR072031
+SRR1298376
+SRR071969
+SRR071971
+SRR1022528
+SRR486611
+SRR10194638
+"
+
+for n in ${num}  
+do echo ${n}; /home/colette_berg/evan/sratoolkit.3.0.1-ubuntu64/bin/fasterq-dump ${n}; done
