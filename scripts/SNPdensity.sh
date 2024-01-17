@@ -1,0 +1,93 @@
+dataDir="/scratch/colette/demux_novogene_lane_2023/YNP_GWAS/data"
+
+list="AHQNT
+AHQT1.2
+YCGP1.2
+YGBR12.1
+YOJO8.3
+YUGB13.2
+YUGB24.1
+YVTC2.2
+YVTC3.2
+YWTB3.2
+YWTB6.2
+YWTB8.2
+YGBR10.1
+YGBR2.1
+YGBR3.1
+YGBR4.3
+YGBR7.1
+YGBR8.3
+YHLB10.2
+YHLB11.1
+YHLB15.1
+YHLB2.1
+YHLB3.4
+YHLB6.2
+YHLB9.2
+YLGB1.1
+YLGB16.2
+YLGB19.3
+YLGB20.2
+YLGB21.2
+YLGB22.1
+YLGB23.3
+YLGB24.3
+YLGB25.1
+YLGB26.1
+YLGB29.3
+YLGB31.1
+YLGB4.2
+YLGB9.1
+YLSG2.1
+YLSG4.4
+YLSG5.4
+YMGB1.1
+YMGB10.2
+YMGB13.3
+YMGB6.1
+YOJO2.2
+YOJO3.2
+YOJO4.1
+YOJO5.1
+YOJO7.1
+YSGB10.2
+YSGB2.2
+YSGB5.1
+YSGB7.2
+YSGB8.2
+YSGB9.4
+YUGB10.1
+YUGB15.1
+YUGB16.1
+YUGB17.2
+YUGB20.1
+YUGB21.2
+YUGB22.1
+YUGB23.2
+YUGB25.2
+YUGB27.1
+YUGB34.3
+YUGB4.2
+YUGB8.2
+YVTC6.1
+YVTC7.2
+YVTC8.2
+YVTC9.3
+YWTB2.2
+YWTB5.2
+YWTB7.2"
+
+for i in $list:
+#do vcftools --vcf ${dataDir}/YNP_chr05_genic.recode.vcf \
+#--indv ${i} \
+#--out ${dataDir}/${i}_genic \
+#--recode
+
+do vcftools --vcf ${dataDir}/${i}_genic.recode.vcf \
+--mac 1 \
+--out ${dataDir}/${i}_genic \
+--SNPdensity 10000;
+done
+
+
