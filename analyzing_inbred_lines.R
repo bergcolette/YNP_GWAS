@@ -15,7 +15,7 @@ YNP_inbredLines <- read.vcfR("YNP_genic_inv5.recode.vcf")
 
 # convert to genind 
 YNP_inbredLines_genind <- vcfR2genind(YNP_inbredLines)
-YNP_inbredLines_genind
+#YNP_inbredLines_genind
 
 # first changing the names because the vcf names are way too long 
 indv_info <- read.csv("YNP_names.csv")
@@ -46,7 +46,7 @@ pca.YNP <- dudi.pca(YNP_for_PCA,
 s.label(pca.YNP$li)
 
 dat <- pca.YNP$li
-write.csv(dat, "PC_axes.csv")
+write.csv(dat, "PC_axes_inv5.csv")
 
 ggplot(dat, aes(x=Axis1, y=Axis2, col=pop(data))) + geom_point() + 
   geom_label(label=rownames(dat), 
@@ -54,12 +54,22 @@ nudge_x = 0.25, nudge_y = 0.25)
 
 #rownames(dat)
 
+ggplot(filter(LD_chr05, R.2!="NaN" & POS1 > 18000000 & POS2 > 18000000), aes(x=as.factor(POS1), 
+                                                                             y=as.factor(POS2),
+                                                                             fill=R.2, col=R.2)) + geom_tile()  +
+  scale_fill_gradient2(low="blue", high="red") +
+  scale_color_gradient2(low="blue", high="red") +
+  theme(axis.text.x = element_text(angle=90),
+        axis.text = element_text(size=3))
+
 # add a plot with the populations 
 s.class(pca.YNP$li, fac=as.factor(pop(data)),
         col=,
         axesel=FALSE, cstar=0, cpoint=3)
 
-PC <- read.csv("PC_axes.csv")
+pca.YNP$
+
+PC <- read.csv("PC_axes_inv5.csv")
 ggplot(PC, aes(x=as.numeric(Longitude), y=as.numeric(Latitude),
                col=inv5_type)) +
   geom_point()
@@ -107,15 +117,16 @@ LD_chr14 <- read.csv("YNP_chr14_genic_thin.geno.ld", sep="\t")
 #LD_chr05 <- mutate(LD_chr05, dist = POS2 - POS1)
 #lheatmap(rel)
 
-ggplot(filt_LD_chr05, aes(x=dist, y=R.2)) + geom_point() + geom_smooth()
 
 filt_LD_chr05 <- filter(LD_chr05, R.2 != "NaN")
+
+ggplot(filt_LD_chr05, aes(x=dist, y=R.2)) + geom_point() + geom_smooth()
 
 ggplot(filt_LD_chr06, aes(x=R.2)) + geom_histogram()
 
 
 
-ggplot(filter(LD_chr10, R.2!="NaN"), aes(x=as.factor(POS1), 
+ggplot(filter(LD_chr08, R.2!="NaN"), aes(x=as.factor(POS1), 
                                    y=as.factor(POS2),
                 fill=R.2, col=R.2)) + geom_tile()  +
   scale_fill_gradient2(low="blue", high="red") +
@@ -173,7 +184,7 @@ a <- rbind(chr1_fstScan,
         chr14_fstScan)
 
 
-ggplot(a,
+ggplot(chr5_fstScan,
               aes(x=BIN_START, y=MEAN_FST)) + 
   geom_point() + facet_wrap(~CHROM, nrow=1) + 
   geom_smooth()
@@ -182,6 +193,372 @@ ggplot(chr5_fstScan, aes(x=BIN_START, y=MEAN_FST)) + geom_point() +
   geom_smooth()
 
 
+pi <- read.csv("YNP_chr05_all.sites.pi", sep="\t")
+pi1 <- read.csv("YNP_chr05_group1.sites.pi", sep="\t")
+pi2 <- read.csv("YNP_chr05_group2.sites.pi", sep="\t")
+
+all <- ggplot(filter(pi, PI!="NaN"), aes(x=POS, y=PI)) + geom_smooth()
+
+grp1 <- ggplot(filter(pi1, PI!="NaN"), aes(x=POS, y=PI)) + geom_smooth()
+
+grp2 <- ggplot(filter(pi2, PI!="NaN"), aes(x=POS, y=PI)) + geom_smooth()
 
 
+library(gridExtra)
+grid.arrange(all, grp1, grp2)
+
+all
+grp1
+grp2
+
+mean(pi1$PI, na.rm=TRUE)
+
+mean(pi2$PI, na.rm=TRUE)
+
+mean(pi$PI, na.rm=TRUE)
+
+mean(filter(pi, POS >=19300000)$PI, na.rm=TRUE)
+mean(filter(pi1, POS >=19300000)$PI, na.rm=TRUE)
+mean(filter(pi2, POS >=19300000)$PI, na.rm=TRUE)
+
+mean(filter(pi, POS < 19300000)$PI, na.rm=TRUE)
+mean(filter(pi1, POS < 19300000)$PI, na.rm=TRUE)
+mean(filter(pi2, POS < 19300000)$PI, na.rm=TRUE)
+
+
+mean(pi_all$PI)
+
+mean(pi_all_inv$PI)
+
+t.test(filter(pi1, POS >=19300000)$PI, filter(pi2, POS >=19300000)$PI)
+
+t.test(filter(pi1, POS < 19300000)$PI, filter(pi2, POS < 19300000)$PI)
+
+
+pi_grp1_inv <- filter(pi, grp=="grp1" & BIN_START >=19300000)
+pi_grp2_inv <- filter(pi, grp=="grp2" & BIN_START >=19300000)
+
+
+pi_grp1_Noinv <- filter(pi, grp=="grp1" & BIN_START < 19300000)
+pi_grp2_Noinv <- filter(pi, grp=="grp2" & BIN_START < 19300000)
+
+mean(pi_grp1_inv$PI)
+mean(pi_grp2_inv$PI)
+
+mean(pi_grp1_Noinv$PI)
+mean(pi_grp2_Noinv$PI)
+
+
+ggplot(pi, aes(x=BIN_START, y=PI, col=grp)) + geom_point()
+
+tajD <- read.csv("TajimasD_100bp.csv")
+ggplot(filter(tajD, BIN_START >= 19300000), aes(x=BIN_START, y=TajimaD, col=grp)) + geom_smooth()
+
+
+not_inv <- filter(tajD, BIN_START < 19300000)
+inv <- filter(tajD, BIN_START >= 19300000)
+
+mean(not_inv$TajimaD_group1, na.rm=TRUE)
+mean(not_inv$TajimaD_group2, na.rm=TRUE)
+
+mean(inv$TajimaD_group1, na.rm=TRUE)
+mean(inv$TajimaD_group2, na.rm=TRUE)
+
+ggplot(inv, aes(x=BIN_START, y=TajimaD_group2)) + geom_smooth()
+
+
+
+YNP_inbredLines <- read.csv("YNP_inbredLines.csv")
+
+ggplot(filter(YNP_inbredLines,
+              inv5_type!="#N/A"), 
+       aes(x=inv5_type, y=Elevation)) + geom_boxplot()
+
+
+t.test(filter(YNP_inbredLines, inv5_type=="group1")$Elevation,
+       filter(YNP_inbredLines, inv5_type=="group2")$Elevation)
+       
+
+summary(aov(Elevation~inv5_type, data=YNP_inbredLines))
+
+
+snps_chr05_end <- read.csv("snps_chr05_end.csv")
+
+#window(snps_chr05_end$line, c(10,9915))
+snps_chr05_end 
+
+#split(snps_chr05_end, 10)
+
+
+#colMeans(matrix(as.numeric(snps_chr05_end$AHQNT), nrow=15), na.rm=TRUE)
+
+colFun <- function(a){
+  colMeans(matrix(as.numeric(a), nrow=15), na.rm=TRUE)
+}
+
+
+class(snps_chr05_end$line)
+
+
+colnames(snps_chr05_end)
+
+a <- aggregate(snps_chr05_end,
+          by=list(snps_chr05_end$line),
+          FUN=matrix(nrow=15))
+
+snps_chr05_end_2 <- snps_chr05_end %>%
+  mutate(across(1:88), ~ (prod(1 + (./100))^((1/yrs)) - 1))
+
+
+
+colMeans(matrix(snps_chr05_end, nrow=15))
+
+
+SNPdensity 
+
+AHQNT <- read.csv("AHQNT_genic.snpden", sep="\t")
+AHQT1.2 <- read.csv("AHQT1.2_genic.snpden", sep="\t")
+YCGP1.2 <- read.csv("YCGP1.2_genic.snpden", sep="\t")
+YGBR12.1 <- read.csv("YGBR12.1_genic.snpden",sep="\t")
+YOJO8.3 <- read.csv("YOJO8.3_genic.snpden",sep="\t")
+YUGB13.2 <- read.csv("YUGB13.2_genic.snpden",sep="\t")
+YUGB24.1 <- read.csv("YUGB24.1_genic.snpden",sep="\t")
+YVTC2.2 <- read.csv("YVTC2.2_genic.snpden",sep="\t")
+YVTC3.2 <- read.csv("YVTC3.2_genic.snpden",sep="\t")
+YWTB3.2 <- read.csv("YWTB3.2_genic.snpden",sep="\t")
+YWTB6.2 <- read.csv("YWTB6.2_genic.snpden",sep="\t")
+YWTB8.2 <- read.csv("YWTB8.2_genic.snpden",sep="\t")
+YGBR10.1 <- read.csv("YGBR10.1_genic.snpden",sep="\t")
+YGBR2.1 <- read.csv("YGBR2.1_genic.snpden", sep="\t")
+YGBR3.1 <- read.csv("YGBR3.1_genic.snpden", sep="\t")
+YGBR4.3 <- read.csv("YGBR4.3_genic.snpden", sep="\t")
+YGBR7.1 <- read.csv("YGBR7.1_genic.snpden", sep="\t")
+YGBR8.3 <- read.csv("YGBR8.3_genic.snpden", sep="\t")
+YHLB10.2 <- read.csv("YHLB10.2_genic.snpden", sep="\t")
+YHLB11.1 <- read.csv("YHLB11.1_genic.snpden", sep="\t")
+YHLB15.1 <- read.csv("YHLB15.1_genic.snpden", sep="\t")
+YHLB2.1 <- read.csv("YHLB2.1_genic.snpden", sep="\t")
+YHLB3.4 <- read.csv("YHLB3.4_genic.snpden", sep="\t")
+YHLB6.2 <- read.csv("YHLB6.2_genic.snpden", sep="\t")
+YHLB9.2 <- read.csv("YHLB9.2_genic.snpden", sep="\t")
+YLGB1.1 <- read.csv("YLGB1.1_genic.snpden", sep="\t")
+YLGB16.2 <- read.csv("YLGB16.2_genic.snpden", sep="\t")
+YLGB19.3 <- read.csv("YLGB19.3_genic.snpden", sep="\t")
+YLGB20.2 <- read.csv("YLGB20.2_genic.snpden", sep="\t")
+YLGB21.2 <- read.csv("YLGB21.2_genic.snpden", sep="\t")
+YLGB22.1 <- read.csv("YLGB22.1_genic.snpden", sep="\t")
+YLGB23.3 <- read.csv("YLGB23.3_genic.snpden", sep="\t")
+YLGB24.3 <- read.csv("YLGB24.3_genic.snpden", sep="\t")
+YLGB25.1 <- read.csv("YLGB25.1_genic.snpden", sep="\t")
+YLGB26.1 <- read.csv("YLGB26.1_genic.snpden", sep="\t")
+YLGB29.3 <- read.csv("YLGB29.3_genic.snpden", sep="\t")
+YLGB31.1 <- read.csv("YLGB31.1_genic.snpden", sep="\t")
+YLGB4.2 <- read.csv("YLGB4.2_genic.snpden", sep="\t")
+YLGB9.1 <- read.csv("YLGB9.1_genic.snpden", sep="\t")
+YLSG2.1 <- read.csv("YLSG2.1_genic.snpden", sep="\t")
+YLSG4.4 <- read.csv("YLSG4.4_genic.snpden", sep="\t")
+YLSG5.4 <- read.csv("YLSG5.4_genic.snpden", sep="\t")
+YMGB1.1 <- read.csv("YMGB1.1_genic.snpden", sep="\t")
+YMGB10.2 <- read.csv("YMGB10.2_genic.snpden", sep="\t")
+YMGB13.3 <- read.csv("YMGB13.3_genic.snpden", sep="\t")
+YMGB6.1 <- read.csv("YMGB6.1_genic.snpden", sep="\t")
+YOJO2.2 <- read.csv("YOJO2.2_genic.snpden", sep="\t")
+YOJO3.2 <- read.csv("YOJO3.2_genic.snpden", sep="\t")
+YOJO4.1 <- read.csv("YOJO4.1_genic.snpden", sep="\t")
+YOJO5.1 <- read.csv("YOJO5.1_genic.snpden", sep="\t")
+YOJO7.1 <- read.csv("YOJO7.1_genic.snpden", sep="\t")
+YSGB10.2 <- read.csv("YSGB10.2_genic.snpden", sep="\t")
+YSGB2.2 <- read.csv("YSGB2.2_genic.snpden", sep="\t")
+YSGB5.1 <- read.csv("YSGB5.1_genic.snpden", sep="\t")
+YSGB7.2 <- read.csv("YSGB7.2_genic.snpden", sep="\t")
+YSGB8.2 <- read.csv("YSGB8.2_genic.snpden", sep="\t")
+YSGB9.4 <- read.csv("YSGB9.4_genic.snpden", sep="\t")
+YUGB10.1 <- read.csv("YUGB10.1_genic.snpden", sep="\t")
+YUGB15.1 <- read.csv("YUGB15.1_genic.snpden", sep="\t")
+YUGB16.1 <- read.csv("YUGB16.1_genic.snpden", sep="\t")
+YUGB17.2 <- read.csv("YUGB17.2_genic.snpden", sep="\t")
+YUGB20.1 <- read.csv("YUGB20.1_genic.snpden", sep="\t")
+YUGB21.2 <- read.csv("YUGB21.2_genic.snpden", sep="\t")
+YUGB22.1 <- read.csv("YUGB22.1_genic.snpden", sep="\t")
+YUGB23.2 <- read.csv("YUGB23.2_genic.snpden", sep="\t")
+YUGB25.2 <- read.csv("YUGB25.2_genic.snpden", sep="\t")
+YUGB27.1 <- read.csv("YUGB27.1_genic.snpden", sep="\t")
+YUGB34.3 <- read.csv("YUGB34.3_genic.snpden", sep="\t")
+YUGB4.2 <- read.csv("YUGB4.2_genic.snpden", sep="\t")
+YUGB8.2 <- read.csv("YUGB8.2_genic.snpden", sep="\t")
+YVTC6.1 <- read.csv("YVTC6.1_genic.snpden", sep="\t")
+YVTC7.2 <- read.csv("YVTC7.2_genic.snpden", sep="\t")
+YVTC8.2 <- read.csv("YVTC8.2_genic.snpden", sep="\t")
+YVTC9.3 <- read.csv("YVTC9.3_genic.snpden", sep="\t")
+YWTB2.2 <- read.csv("YWTB2.2_genic.snpden", sep="\t")
+YWTB5.2 <- read.csv("YWTB5.2_genic.snpden", sep="\t")
+
+
+AHQNT<- mutate(AHQNT, name="AHQNT", group="group1")
+AHQT1.2<- mutate(AHQT1.2, name="AHQT1.2", group="group1")
+YCGP1.2<- mutate(YCGP1.2, name="YCGP1.2", group="group1")
+YGBR12.1<- mutate(YGBR12.1, name="YGBR12.1", group="group1")
+YOJO8.3<- mutate(YOJO8.3, name="YOJO8.3", group="group2")
+YUGB13.2<- mutate(YUGB13.2, name="YUGB13.2", group="group1")
+YUGB24.1<- mutate(YUGB24.1, name="YUGB24.1", group="group1")
+YVTC2.2<- mutate(YVTC2.2, name="YVTC2.2", group="group1")
+YVTC3.2<- mutate(YVTC3.2, name="YVTC3.2", group="group1")
+YWTB3.2<- mutate(YWTB3.2, name="YWTB3.2", group="group1")
+YWTB6.2<- mutate(YWTB6.2, name="YWTB6.2", group="group1")
+YWTB8.2<- mutate(YWTB8.2, name="YWTB8.2", group="group1")
+YGBR10.1<- mutate(YGBR10.1, name="YGBR10.1", group="group1")
+YGBR2.1<- mutate(YGBR2.1, name="YGBR2.1", group="group1")
+YGBR3.1<- mutate(YGBR3.1, name="YGBR3.1", group="group1")
+YGBR4.3<- mutate(YGBR4.3, name="YGBR4.3", group="group1")
+YGBR7.1<- mutate(YGBR7.1, name="YGBR7.1", group="group1")
+YGBR8.3<- mutate(YGBR8.3, name="YGBR8.3", group="group1")
+YHLB10.2<- mutate(YHLB10.2, name="YHLB10.2", group="group1")
+YHLB11.1<- mutate(YHLB11.1, name="YHLB11.1", group="group1")
+YHLB15.1<- mutate(YHLB15.1, name="YHLB15.1", group="group1")
+YHLB2.1<- mutate(YHLB2.1, name="YHLB2.1", group="group1")
+YHLB3.4<- mutate(YHLB3.4, name="YHLB3.4", group="group1")
+YHLB6.2<- mutate(YHLB6.2, name="YHLB6.2", group="group1")
+YHLB9.2<- mutate(YHLB9.2, name="YHLB9.2", group="group1")
+YLGB1.1<- mutate(YLGB1.1, name="YLGB1.1", group="group1")
+YLGB16.2<- mutate(YLGB16.2, name="YLGB16.2", group="group1")
+YLGB19.3<- mutate(YLGB19.3, name="YLGB19.3", group="group1")
+YLGB20.2<- mutate(YLGB20.2, name="YLGB20.2", group="group1")
+YLGB21.2<- mutate(YLGB21.2, name="YLGB21.2", group="group1")
+YLGB22.1<- mutate(YLGB22.1, name="YLGB22.1", group="group1")
+YLGB23.3<- mutate(YLGB23.3, name="YLGB23.3", group="group1")
+YLGB24.3<- mutate(YLGB24.3, name="YLGB24.3", group="group1")
+YLGB25.1<- mutate(YLGB25.1, name="YLGB25.1", group="group1")
+YLGB26.1<- mutate(YLGB26.1, name="YLGB26.1", group="group1")
+YLGB29.3<- mutate(YLGB29.3, name="YLGB29.3", group="group1")
+YLGB31.1<- mutate(YLGB31.1, name="YLGB31.1", group="group1")
+YLGB4.2<- mutate(YLGB4.2, name="YLGB4.2", group="group1")
+YLGB9.1<- mutate(YLGB9.1, name="YLGB9.1", group="group1")
+YLSG2.1<- mutate(YLSG2.1, name="YLSG2.1", group="group1")
+YLSG4.4<- mutate(YLSG4.4, name="YLSG4.4", group="group2")
+YLSG5.4<- mutate(YLSG5.4, name="YLSG5.4", group="group1")
+YMGB1.1<- mutate(YMGB1.1, name="YMGB1.1", group="group1")
+YMGB10.2<- mutate(YMGB10.2, name="YMGB10.2", group="group1")
+YMGB13.3<- mutate(YMGB13.3, name="YMGB13.3", group="group1")
+YMGB6.1<- mutate(YMGB6.1, name="YMGB6.1", group="group1")
+YOJO2.2<- mutate(YOJO2.2, name="YOJO2.2", group="group2")
+YOJO3.2<- mutate(YOJO3.2, name="YOJO3.2", group="group1")
+YOJO4.1<- mutate(YOJO4.1, name="YOJO4.1", group="group2")
+YOJO5.1<- mutate(YOJO5.1, name="YOJO5.1", group="group1")
+YOJO7.1<- mutate(YOJO7.1, name="YOJO7.1", group="group2")
+YSGB10.2<- mutate(YSGB10.2, name="YSGB10.2", group="group1")
+YSGB2.2<- mutate(YSGB2.2, name="YSGB2.2", group="group1")
+YSGB5.1<- mutate(YSGB5.1, name="YSGB5.1", group="group1")
+YSGB7.2<- mutate(YSGB7.2, name="YSGB7.2", group="group1")
+YSGB8.2<- mutate(YSGB8.2, name="YSGB8.2", group="group1")
+YSGB9.4<- mutate(YSGB9.4, name="YSGB9.4", group="group2")
+YUGB10.1<- mutate(YUGB10.1, name="YUGB10.1", group="group1")
+YUGB15.1<- mutate(YUGB15.1, name="YUGB15.1", group="group2")
+YUGB16.1<- mutate(YUGB16.1, name="YUGB16.1", group="group2")
+YUGB17.2<- mutate(YUGB17.2, name="YUGB17.2", group="group2")
+YUGB20.1<- mutate(YUGB20.1, name="YUGB20.1", group="group2")
+YUGB21.2<- mutate(YUGB21.2, name="YUGB21.2", group="group2")
+YUGB22.1<- mutate(YUGB22.1, name="YUGB22.1", group="group2")
+YUGB23.2<- mutate(YUGB23.2, name="YUGB23.2", group="group1")
+YUGB25.2<- mutate(YUGB25.2, name="YUGB25.2", group="group1")
+YUGB27.1<- mutate(YUGB27.1, name="YUGB27.1", group="group2")
+YUGB34.3<- mutate(YUGB34.3, name="YUGB34.3", group="group1")
+YUGB4.2<- mutate(YUGB4.2, name="YUGB4.2", group="group1")
+YUGB8.2<- mutate(YUGB8.2, name="YUGB8.2", group="group2")
+YVTC6.1<- mutate(YVTC6.1, name="YVTC6.1", group="group1")
+YVTC7.2<- mutate(YVTC7.2, name="YVTC7.2", group="group1")
+YVTC8.2<- mutate(YVTC8.2, name="YVTC8.2", group="group1")
+YVTC9.3<- mutate(YVTC9.3, name="YVTC9.3", group="group1")
+YWTB2.2<- mutate(YWTB2.2, name="YWTB2.2", group="group1")
+YWTB5.2<- mutate(YWTB5.2, name="YWTB5.2", group="group1")
+
+a <- rbind(AHQNT,
+        AHQT1.2,
+        YCGP1.2,
+        YGBR12.1,
+        YOJO8.3,
+        YUGB13.2,
+        YUGB24.1,
+        YVTC2.2,
+        YVTC3.2,
+        YWTB3.2,
+        YWTB6.2,
+        YWTB8.2,
+        YGBR10.1,
+        YGBR2.1,
+        YGBR3.1,
+        YGBR4.3,
+        YGBR7.1,
+        YGBR8.3,
+        YHLB10.2,
+        YHLB11.1,
+        YHLB15.1,
+        YHLB2.1,
+        YHLB3.4,
+        YHLB6.2,
+        YHLB9.2,
+        YLGB1.1,
+        YLGB16.2,
+        YLGB19.3,
+        YLGB20.2,
+        YLGB21.2,
+        YLGB22.1,
+        YLGB23.3,
+        YLGB24.3,
+        YLGB25.1,
+        YLGB26.1,
+        YLGB29.3,
+        YLGB31.1,
+        YLGB4.2,
+        YLGB9.1,
+        YLSG2.1,
+        YLSG4.4,
+        YLSG5.4,
+        YMGB1.1,
+        YMGB10.2,
+        YMGB13.3,
+        YMGB6.1,
+        YOJO2.2,
+        YOJO3.2,
+        YOJO4.1,
+        YOJO5.1,
+        YOJO7.1,
+        YSGB10.2,
+        YSGB2.2,
+        YSGB5.1,
+        YSGB7.2,
+        YSGB8.2,
+        YSGB9.4,
+        YUGB10.1,
+        YUGB15.1,
+        YUGB16.1,
+        YUGB17.2,
+        YUGB20.1,
+        YUGB21.2,
+        YUGB22.1,
+        YUGB23.2,
+        YUGB25.2,
+        YUGB27.1,
+        YUGB34.3,
+        YUGB4.2,
+        YUGB8.2,
+        YVTC6.1,
+        YVTC7.2,
+        YVTC8.2,
+        YVTC9.3,
+        YWTB2.2,
+        YWTB5.2)
+
+
+library(dplyr)
+ldply(indvs)
+
+ggplot(filter(a, BIN_START > 18000000), 
+       aes(x=BIN_START, y=name, col=SNP_COUNT,
+           fill=SNP_COUNT)) + geom_tile() + 
+  facet_wrap(~group, nrow=2, scales="free") +
+  scale_fill_gradient2(mid="blue", high="red") +
+  scale_color_gradient2(mid="blue", high="red")
+a$SNP_COUNT
+
+# okay I got to the point where it shows that the different inversion types ahve different numbers of SNPs 
 
