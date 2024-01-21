@@ -1,5 +1,17 @@
 
-#samtools view ATTU_GUT.bam Chr_05 -b -o ATTU_GUT_chr05.bam 
+list="CACG6_GUT.bam
+KOOT_NAS.bam
+PED5_GUT.bam
+REM8_GUT.bam
+SILF_COR.bam
+SLP_GUT.bam"
+
+#for i in $list;
+
+#do samtools index $i;
+#samtools view $i Chr_05:19300000 -b -o  ${i:0:-4}_chr05_inv.bam;
+
+#done
 
 #samtools view GUT5.bam Chr_05 -b -o GUT5_chr05.bam 
 
@@ -28,6 +40,11 @@
 
 #samtools view SRR071996.bam Chr_05:19300000 -b -o SRR071996_chr05_inv.bam 
 
-for i in *inv.bam; 
-do samtools view $i -L /home/colette_berg/resources/reference_genomes/AHQT/AHQTv1_genes.bed -b -o ${i:0:-4}.genic.bam;
+#for i in *inv.bam; 
+#do echo $i; 
+#samtools view $i -L /home/colette_berg/resources/reference_genomes/AHQT/AHQTv1_genes.bed -b -o ${i:0:-4}.genic.bam;
+#done
+
+for i in *inv.genic.bam; 
+do samtools index $i 
 done
