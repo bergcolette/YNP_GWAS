@@ -55,15 +55,15 @@ echo $genomefa
 echo $rdgrp
 echo $t
 
- 	gunzip ${filename}_R1_001.fastq.gz
-	gunzip ${filename}_R2_001.fastq.gz
+ 	#gunzip ${filename}_R1_001.fastq.gz
+	#gunzip ${filename}_R2_001.fastq.gz
 	#bunzip2 ${filename}.1.fastq.bz2
 	#bunzip2 ${filename}.2.fastq.bz2
 
 	# remove adapters and low quality seq
 	echo "Trimming low quality reads and adapters from ${filename}"
 	java -jar /home/thom_nelson/opt/Trimmomatic-0.35/trimmomatic-0.35.jar PE \
-	     -threads $t -phred33 ${filename}_R1_001.fastq ${filename}_R2_001.fastq \
+	     -threads $t -phred33 ${filename}_1.fastq ${filename}_2.fastq \
 	     ${filename}.1.paired.fastq ${filename}.1.unpaired.fastq \
 	     ${filename}.2.paired.fastq ${filename}.2.unpaired.fastq \
 	     ILLUMINACLIP:/home/thom_nelson/bin/resources/Illumina/Many.TruSeq.PE.fa:2:20:10:4 \
@@ -109,8 +109,8 @@ echo $t
 	samtools sort -T ${filename} -o ${filename}.bam ${filename}.unsorted.bam
 	samtools flagstat ${filename}.bam > ${filename}.flagstats #get some stats on final bam
 	samtools index ${filename}.bam #index final bam
-	gzip -9 ${filename}_R1_001.fastq.gz #zip files
-	gzip -9 ${filename}_R2_001.fastq.gz
+	#gzip -9 ${filename}_R1_001.fastq.gz #zip files
+	#gzip -9 ${filename}_R2_001.fastq.gz
 
 	### Clean up, round 2
 	# echo "Removing intermediate files"
