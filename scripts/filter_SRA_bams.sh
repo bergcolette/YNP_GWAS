@@ -1,5 +1,8 @@
 
-list="CACG6_GUT.bam
+mainDir="/scratch/colette/demux_novogene_lane_2023/YNP_GWAS/data/diversity"
+
+
+list="CSS4_GUT.bam
 KOOT_NAS.bam
 PED5_GUT.bam
 REM8_GUT.bam
@@ -13,7 +16,12 @@ SLP_GUT.bam"
 
 #done
 
-#samtools view GUT5.bam Chr_05 -b -o GUT5_chr05.bam 
+samtools view ${mainDir}/LMC24_GUT.bam Chr_05:19300000 -b -o ${mainDir}/LMC24_GUT_chr05_inv.bam 
+
+samtools view ${mainDir}/CSS4_GUT.bam Chr_05:19300000 -b -o ${mainDir}/CSS4_chr05_inv.bam 
+
+samtools view ${mainDir}/SCH_GUT.bam Chr_05:19300000 -b -o ${mainDir}/SHC_GUT_chr05_inv.bam 
+
 
 #samtools view NRM_NAS.bam Chr_05 -b -o NRM_NAS_chr05.bam 
 
