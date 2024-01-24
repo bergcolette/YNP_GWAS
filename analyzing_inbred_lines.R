@@ -126,7 +126,7 @@ ggplot(filt_LD_chr06, aes(x=R.2)) + geom_histogram()
 
 
 
-ggplot(filter(LD_chr08, R.2!="NaN"), aes(x=as.factor(POS1), 
+ggplot(filter(filt_LD_chr05, R.2!="NaN"), aes(x=as.factor(POS1), 
                                    y=as.factor(POS2),
                 fill=R.2, col=R.2)) + geom_tile()  +
   scale_fill_gradient2(low="blue", high="red") +
@@ -184,7 +184,7 @@ a <- rbind(chr1_fstScan,
         chr14_fstScan)
 
 
-ggplot(chr5_fstScan,
+ggplot(a,
               aes(x=BIN_START, y=MEAN_FST)) + 
   geom_point() + facet_wrap(~CHROM, nrow=1) + 
   geom_smooth()
@@ -211,6 +211,15 @@ all
 grp1
 grp2
 
+pi <- mutate(pi, grp="all")
+pi1 <- mutate(pi1, grp="group1")
+pi2 <- mutate(pi2, grp="group2")
+
+
+pi_3 <- rbind(pi, pi1, pi2)
+
+ggplot(pi_3, aes(x=POS, y=PI, col = grp)) + geom_smooth()
+
 mean(pi1$PI, na.rm=TRUE)
 
 mean(pi2$PI, na.rm=TRUE)
@@ -225,10 +234,6 @@ mean(filter(pi, POS < 19300000)$PI, na.rm=TRUE)
 mean(filter(pi1, POS < 19300000)$PI, na.rm=TRUE)
 mean(filter(pi2, POS < 19300000)$PI, na.rm=TRUE)
 
-
-mean(pi_all$PI)
-
-mean(pi_all_inv$PI)
 
 t.test(filter(pi1, POS >=19300000)$PI, filter(pi2, POS >=19300000)$PI)
 
@@ -398,7 +403,7 @@ AHQNT<- mutate(AHQNT, name="AHQNT", group="group1")
 AHQT1.2<- mutate(AHQT1.2, name="AHQT1.2", group="group1")
 YCGP1.2<- mutate(YCGP1.2, name="YCGP1.2", group="group1")
 YGBR12.1<- mutate(YGBR12.1, name="YGBR12.1", group="group1")
-YOJO8.3<- mutate(YOJO8.3, name="YOJO8.3", group="group2")
+YOJO8.3<- mutate(YOJO8.3, name="YOJO8.3", group="group1")
 YUGB13.2<- mutate(YUGB13.2, name="YUGB13.2", group="group1")
 YUGB24.1<- mutate(YUGB24.1, name="YUGB24.1", group="group1")
 YVTC2.2<- mutate(YVTC2.2, name="YVTC2.2", group="group1")
@@ -423,8 +428,8 @@ YLGB1.1<- mutate(YLGB1.1, name="YLGB1.1", group="group1")
 YLGB16.2<- mutate(YLGB16.2, name="YLGB16.2", group="group1")
 YLGB19.3<- mutate(YLGB19.3, name="YLGB19.3", group="group1")
 YLGB20.2<- mutate(YLGB20.2, name="YLGB20.2", group="group1")
-YLGB21.2<- mutate(YLGB21.2, name="YLGB21.2", group="group1")
-YLGB22.1<- mutate(YLGB22.1, name="YLGB22.1", group="group1")
+YLGB21.2<- mutate(YLGB21.2, name="YLGB21.2", group="group2")
+YLGB22.1<- mutate(YLGB22.1, name="YLGB22.1", group="group2")
 YLGB23.3<- mutate(YLGB23.3, name="YLGB23.3", group="group1")
 YLGB24.3<- mutate(YLGB24.3, name="YLGB24.3", group="group1")
 YLGB25.1<- mutate(YLGB25.1, name="YLGB25.1", group="group1")
@@ -435,13 +440,13 @@ YLGB4.2<- mutate(YLGB4.2, name="YLGB4.2", group="group1")
 YLGB9.1<- mutate(YLGB9.1, name="YLGB9.1", group="group1")
 YLSG2.1<- mutate(YLSG2.1, name="YLSG2.1", group="group1")
 YLSG4.4<- mutate(YLSG4.4, name="YLSG4.4", group="group2")
-YLSG5.4<- mutate(YLSG5.4, name="YLSG5.4", group="group1")
+YLSG5.4<- mutate(YLSG5.4, name="YLSG5.4", group="group2")
 YMGB1.1<- mutate(YMGB1.1, name="YMGB1.1", group="group1")
 YMGB10.2<- mutate(YMGB10.2, name="YMGB10.2", group="group1")
 YMGB13.3<- mutate(YMGB13.3, name="YMGB13.3", group="group1")
 YMGB6.1<- mutate(YMGB6.1, name="YMGB6.1", group="group1")
-YOJO2.2<- mutate(YOJO2.2, name="YOJO2.2", group="group2")
-YOJO3.2<- mutate(YOJO3.2, name="YOJO3.2", group="group1")
+YOJO2.2<- mutate(YOJO2.2, name="YOJO2.2", group="group1")
+YOJO3.2<- mutate(YOJO3.2, name="YOJO3.2", group="group2")
 YOJO4.1<- mutate(YOJO4.1, name="YOJO4.1", group="group2")
 YOJO5.1<- mutate(YOJO5.1, name="YOJO5.1", group="group1")
 YOJO7.1<- mutate(YOJO7.1, name="YOJO7.1", group="group2")
@@ -454,19 +459,19 @@ YSGB9.4<- mutate(YSGB9.4, name="YSGB9.4", group="group2")
 YUGB10.1<- mutate(YUGB10.1, name="YUGB10.1", group="group1")
 YUGB15.1<- mutate(YUGB15.1, name="YUGB15.1", group="group2")
 YUGB16.1<- mutate(YUGB16.1, name="YUGB16.1", group="group2")
-YUGB17.2<- mutate(YUGB17.2, name="YUGB17.2", group="group2")
+YUGB17.2<- mutate(YUGB17.2, name="YUGB17.2", group="group1")
 YUGB20.1<- mutate(YUGB20.1, name="YUGB20.1", group="group2")
-YUGB21.2<- mutate(YUGB21.2, name="YUGB21.2", group="group2")
-YUGB22.1<- mutate(YUGB22.1, name="YUGB22.1", group="group2")
+YUGB21.2<- mutate(YUGB21.2, name="YUGB21.2", group="group1")
+YUGB22.1<- mutate(YUGB22.1, name="YUGB22.1", group="group1")
 YUGB23.2<- mutate(YUGB23.2, name="YUGB23.2", group="group1")
 YUGB25.2<- mutate(YUGB25.2, name="YUGB25.2", group="group1")
 YUGB27.1<- mutate(YUGB27.1, name="YUGB27.1", group="group2")
 YUGB34.3<- mutate(YUGB34.3, name="YUGB34.3", group="group1")
 YUGB4.2<- mutate(YUGB4.2, name="YUGB4.2", group="group1")
-YUGB8.2<- mutate(YUGB8.2, name="YUGB8.2", group="group2")
+YUGB8.2<- mutate(YUGB8.2, name="YUGB8.2", group="group1")
 YVTC6.1<- mutate(YVTC6.1, name="YVTC6.1", group="group1")
 YVTC7.2<- mutate(YVTC7.2, name="YVTC7.2", group="group1")
-YVTC8.2<- mutate(YVTC8.2, name="YVTC8.2", group="group1")
+YVTC8.2<- mutate(YVTC8.2, name="YVTC8.2", group="group2")
 YVTC9.3<- mutate(YVTC9.3, name="YVTC9.3", group="group1")
 YWTB2.2<- mutate(YWTB2.2, name="YWTB2.2", group="group1")
 YWTB5.2<- mutate(YWTB5.2, name="YWTB5.2", group="group1")
@@ -517,9 +522,7 @@ a <- rbind(AHQNT,
         YMGB10.2,
         YMGB13.3,
         YMGB6.1,
-        YOJO2.2,
         YOJO3.2,
-        YOJO4.1,
         YOJO5.1,
         YOJO7.1,
         YSGB10.2,
@@ -531,9 +534,7 @@ a <- rbind(AHQNT,
         YUGB10.1,
         YUGB15.1,
         YUGB16.1,
-        YUGB17.2,
         YUGB20.1,
-        YUGB21.2,
         YUGB22.1,
         YUGB23.2,
         YUGB25.2,
@@ -549,8 +550,8 @@ a <- rbind(AHQNT,
         YWTB5.2)
 
 
-library(dplyr)
-ldply(indvs)
+#library(dplyr)
+#ldply(indvs)
 
 ggplot(filter(a, BIN_START > 18000000), 
        aes(x=BIN_START, y=name, col=SNP_COUNT,
@@ -558,7 +559,86 @@ ggplot(filter(a, BIN_START > 18000000),
   facet_wrap(~group, nrow=2, scales="free") +
   scale_fill_gradient2(mid="blue", high="red") +
   scale_color_gradient2(mid="blue", high="red")
-a$SNP_COUNT
+
+#a$SNP_COUNT
+
+
+a1 <- filter(a, group=="group1" & BIN_START > 19300000)
+a2 <- filter(a, group=="group2" & BIN_START > 19300000)
+
+a3 <- filter(a, group=="group1" & BIN_START <= 19300000)
+a4 <- filter(a, group=="group2" & BIN_START <= 19300000)
+
+mean(a1$VARIANTS.KB)
+
+ggplot(a1, aes(x=))
+
+sd(a1$VARIANTS.KB)
+
+
+mean(a2$VARIANTS.KB)
+mean(a1$VARIANTS.KB)
+
+mean(a3$VARIANTS.KB)
+mean(a4$VARIANTS.KB)
+
+t.test(a2$VARIANTS.KB, a1$VARIANTS.KB)
+
+
+
+sd(a2$VARIANTS.KB)
+
+ggplot(filter(a, BIN_START > 19300000), 
+       aes(x=group, y=VARIANTS.KB)) + geom_violin()
+
+
+max(a2$VARIANTS.KB)
 
 # okay I got to the point where it shows that the different inversion types ahve different numbers of SNPs 
+inbreds <- read.csv("YNP_inbredLines.csv")
+
+
+ggplot(filter(inbreds, inv5_type != "#N/A"), 
+       aes(y=Latitude, x=Longitude, col=inv5_type,
+           size=Elevation)) + geom_point()
+
+
+pos <- as.data.frame(colMeans(matrix(as.numeric(pi$POS), nrow=100), na.rm=TRUE))
+colnames(pos) <- c("pos")
+
+piWin <- colMeans(matrix(as.numeric(pi$PI), nrow=100), na.rm=TRUE)
+pi1Win <- colMeans(matrix(as.numeric(pi1$PI), nrow=100), na.rm=TRUE)
+pi2Win <- colMeans(matrix(as.numeric(pi2$PI), nrow=100), na.rm=TRUE)
+
+piWin <- as.data.frame(piWin)
+colnames(piWin) <- c("pi")
+
+pi1Win <- as.data.frame(pi1Win)
+colnames(pi1Win) <- c("pi")
+
+pi2Win <- as.data.frame(pi2Win)
+colnames(pi2Win) <- c("pi")
+
+
+piWin <- mutate(piWin, grp = "piAll")
+piWin <- mutate(piWin, pos = pos$pos)
+
+pi1Win <- mutate(pi1Win, grp = "pi_group1")
+pi1Win <- mutate(pi1Win, pos = pos$pos)
+
+pi2Win <- mutate(pi2Win, grp = "pi_group2")
+pi2Win <- mutate(pi2Win, pos = pos$pos)
+
+
+
+
+piiii <- rbind(piWin, pi1Win, pi2Win)
+
+piiii
+ggplot(piiii, aes(x=pos, y=pi, col=grp)) + geom_smooth()
+
+
+
+
+
 
